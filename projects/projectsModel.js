@@ -8,8 +8,6 @@ db.serialize(() => {
   )`);
 });
 
-// db.close();
-
 const createProject = (project) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -18,7 +16,9 @@ const createProject = (project) => {
       (name)
       VALUES(?);
       `);
-      stmt.run(project.name, (err) => {
+      // function instead of arrow function because of this
+      // this is now representing the object that runs the function not the owner
+      stmt.run(project.name, function (err) {
         if (err) {
           console.error(err);
           return reject(err);
@@ -38,6 +38,7 @@ const getProjects = () => {
       let sql = `SELECT * FROM projects`;
       db.all(sql, (err, rows) => {
         if (err) {
+          console.error(err);
           return reject(err);
         }
         resolve(rows);
@@ -46,4 +47,60 @@ const getProjects = () => {
   });
 };
 
-module.exports = { createProject, getProjects };
+const getProject = (id) => {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      let sql = `SELECT * FROM projects WHERE id = ?;`;
+      db.get(sql, id, (err, rows) => {
+        if (err) {
+          console.error(err);
+          return reject(err);
+        }
+        resolve(rows);
+      });
+    });
+  });
+};
+
+const updateProject = (project) => {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      let sql = `UPDATE projects 
+      SET name = ?
+      WHERE id = ?;`;
+      db.get(sql, project.name, project.id, (err, row) => {
+        if (err) {
+          console.error(err);
+          return reject(err);
+        }
+        resolve(row);
+      });
+    });
+  });
+};
+
+const deleteProject = (id) => {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      const stmt = db.prepare(`DELETE FROM projects 
+      WHERE id = ?;`);
+      stmt.run(id, (err) => {
+        if (err) {
+          console.error(err);
+          return reject(err);
+        }
+        console.log(id);
+        resolve(id);
+      });
+      stmt.finalize();
+    });
+  });
+};
+
+module.exports = {
+  createProject,
+  getProjects,
+  getProject,
+  updateProject,
+  deleteProject,
+};

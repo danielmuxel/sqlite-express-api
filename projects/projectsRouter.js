@@ -3,11 +3,11 @@ const projectsController = require("./projectsController");
 
 router.route("/").get(projectsController.index).post(projectsController.create);
 
-// router
-//   .route("/:projects_id")
-//   .get(projectsController.detail)
-//   .patch(projectsController.update)
-//   .put(projectsController.update)
-//   .delete(projectsController.delete);
+router
+  .route("/:projects_id")
+  .get(projectsController.detail)
+  .patch(projectsController.update)
+  .put(projectsController.update)
+  .delete(projectsController.del);
 
 module.exports = router;
