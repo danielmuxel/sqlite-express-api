@@ -1,13 +1,14 @@
 const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("test.db");
+const db = new sqlite3.Database("./data/test.db");
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS projects (
     id integer PRIMARY KEY NOT NULL,
     name text NOT NULL
-  )`);
+  );`);
 });
 
+// https://www.sqlitetutorial.net/sqlite-insert/
 const createProject = (project) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -32,6 +33,7 @@ const createProject = (project) => {
   });
 };
 
+// https://www.sqlitetutorial.net/sqlite-select/
 const getProjects = () => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -47,6 +49,7 @@ const getProjects = () => {
   });
 };
 
+// https://www.sqlitetutorial.net/sqlite-select/
 const getProject = (id) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -62,6 +65,7 @@ const getProject = (id) => {
   });
 };
 
+// https://www.sqlitetutorial.net/sqlite-update/
 const updateProject = (project) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -79,6 +83,7 @@ const updateProject = (project) => {
   });
 };
 
+// https://www.sqlitetutorial.net/sqlite-delete/
 const deleteProject = (id) => {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -97,6 +102,7 @@ const deleteProject = (id) => {
   });
 };
 
+// export it all
 module.exports = {
   createProject,
   getProjects,
