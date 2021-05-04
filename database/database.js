@@ -1,7 +1,7 @@
 // import dependencies
 const fs = require("fs");
 const sqlite3 = require("sqlite3").verbose();
-const databaseFile = "./data/test2.db";
+const databaseFile = "./data/test.db";
 
 // delete the database file
 try {
